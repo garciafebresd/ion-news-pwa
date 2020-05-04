@@ -1,0 +1,17 @@
+<ion-header [translucent]="true" class="ion-no-border">
+    <ion-toolbar color="dark">
+        <ion-title>
+            Headers
+        </ion-title>
+    </ion-toolbar>
+
+    <ion-segment scrollable mode="md" color="primary">
+        <ion-segment-button mode="md" *ngFor="let category of categories" [value]="category">
+            <ion-label>{{ category }}</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="dark">
+
+</ion-content>
