@@ -1,6 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { IonSegment } from '@ionic/angular';
 
+import { NewsService } from '../../services/news.service';
+import { Article } from 'src/app/models/article.model';
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -8,7 +11,9 @@ import { IonSegment } from '@ionic/angular';
 })
 export class Tab2Page implements OnInit {
 
-  @ViewChild(IonSegment, { static: false }) segment: IonSegment;
+  articles: Article[] = [];
+
+  @ViewChild(IonSegment) segment: IonSegment;
 
   categories = [
     'business',
@@ -20,9 +25,35 @@ export class Tab2Page implements OnInit {
     'technology'
   ];
 
-  constructor() { }
+  constructor(private newsService: NewsService) { }
 
   ngOnInit() {
-    this.segment.value = this.categories[0];
+
+    const category = this.categories[0];
+    this.segment.value = category;
+    this.loadNews(category);
+
+  }
+
+  changeCategory(event) {
+
+    const category = event.detail.value;
+    console.log('changeCategory', category);
+
+    this.articles = [];
+    this.loadNews(category);
+
+  }
+
+  loadNews(category: string) {
+
+    this.newsService.getTopHeadlinesCategory(category).subscribe((response) => {
+
+      this.articles.push(
+        ...response.articles
+      );
+
+    });
+
   }
 }
