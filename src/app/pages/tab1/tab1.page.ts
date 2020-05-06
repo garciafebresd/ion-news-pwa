@@ -15,13 +15,37 @@ export class Tab1Page implements OnInit {
 
   ngOnInit() {
 
+    this.loadTopHeadlines();
+
+  }
+
+  loadData(event) {
+
+    console.log('loadData infinite scroll');
+
+    this.loadTopHeadlines(event);
+  }
+
+  loadTopHeadlines(event?) {
+
     this.newsService.getTopHeadlines().subscribe((response) => {
 
       this.articles.push(
         ...response.articles
       );
 
+      if (event) {
+
+        event.target.complete();
+
+        if (response.articles.length === 0) {
+          event.target.disabled = true;
+        }
+
+      }
+
     });
 
   }
+
 }

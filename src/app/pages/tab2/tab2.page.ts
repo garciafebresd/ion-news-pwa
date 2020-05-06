@@ -13,7 +13,7 @@ export class Tab2Page implements OnInit {
 
   articles: Article[] = [];
 
-  @ViewChild(IonSegment) segment: IonSegment;
+  @ViewChild(IonSegment, {static: true}) segment: IonSegment;
 
   categories = [
     'business',
@@ -38,14 +38,13 @@ export class Tab2Page implements OnInit {
   changeCategory(event) {
 
     const category = event.detail.value;
-    console.log('changeCategory', category);
 
     this.articles = [];
     this.loadNews(category);
 
   }
 
-  loadNews(category: string) {
+  loadNews(category: string, event?) {
 
     this.newsService.getTopHeadlinesCategory(category).subscribe((response) => {
 
@@ -53,7 +52,17 @@ export class Tab2Page implements OnInit {
         ...response.articles
       );
 
+      if (event) {
+        event.target.complete();
+      }
+
     });
+
+  }
+
+  loadData(event) {
+
+    this.loadNews(this.segment.value, event);
 
   }
 }
