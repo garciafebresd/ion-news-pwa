@@ -4,6 +4,13 @@
         <ion-card-subtitle>
             <span class="text-primary">{{ indice + 1 }} - </span>
             <span class="article-source-name">{{ article.source.name }}</span>
+
+            <div class="article-more">
+                <ion-button (click)="launchMenu()" fill="clear">
+                    <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+                </ion-button>
+            </div>
+
         </ion-card-subtitle>
         <ion-card-title (click)="openActicle()">{{ article.title }}</ion-card-title>
     </ion-card-header>
