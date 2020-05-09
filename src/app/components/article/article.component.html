@@ -15,7 +15,7 @@
         <ion-card-title (click)="openActicle()">{{ article.title }}</ion-card-title>
     </ion-card-header>
 
-    <ion-img *ngIf="article.urlToImage" (click)="openActicle()" [src]="article.urlToImage"></ion-img>
+    <ion-img *ngIf="article.urlToImage" (click)="openActicle()" [src]="article.urlToImage" class="animated fadeIn fast"></ion-img>
 
     <ion-card-content>
         {{ article.description }}

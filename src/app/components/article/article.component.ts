@@ -15,6 +15,7 @@ export class ArticleComponent implements OnInit {
 
   @Input() article: Article;
   @Input() indice: number;
+  @Input() favoritesFlag;
 
   constructor(private iab: InAppBrowser,
               private socialSharing: SocialSharing,
@@ -29,6 +30,9 @@ export class ArticleComponent implements OnInit {
   }
 
   async launchMenu() {
+
+    const dynamicBtnFavorites = this.addRemoveFavorites();
+
     const actionSheet = await this.actionSheetController.create({
       // header: 'Actions',
       buttons: [{
@@ -46,17 +50,9 @@ export class ArticleComponent implements OnInit {
           );
 
         }
-      }, {
-        text: 'Favorite',
-        icon: 'star-outline',
-        cssClass: 'action-dark',
-        handler: () => {
-
-          console.log('Favorite clicked');
-          this.dataStorageLocalService.saveArticle(this.article);
-
-        }
-      }, {
+      },
+      dynamicBtnFavorites,
+      {
         text: 'Cancel',
         icon: 'close',
         cssClass: 'action-dark',
@@ -67,5 +63,36 @@ export class ArticleComponent implements OnInit {
       }]
     });
     await actionSheet.present();
+  }
+
+  addRemoveFavorites() {
+
+    // Add to favorites
+    let btnFavorites = {
+      text: 'Favorite',
+      icon: 'star-outline',
+      cssClass: 'action-dark',
+      handler: () => {
+
+        console.log('Favorite clicked');
+        this.dataStorageLocalService.saveArticle(this.article);
+      }
+    };
+
+    if (this.favoritesFlag) {
+      // Remove from favorites
+      btnFavorites = {
+        text: 'Remove from favorite',
+        icon: 'trash',
+        cssClass: 'action-dark',
+        handler: () => {
+
+          console.log('Remove Favorite clicked');
+          this.dataStorageLocalService.removeArticle(this.article);
+        }
+      };
+    }
+
+    return btnFavorites;
   }
 }

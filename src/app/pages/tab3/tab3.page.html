@@ -8,4 +8,11 @@
 
 <ion-content [fullscreen]="true" color="dark">
 
+    <ion-slides [options]="sliderOptions" *ngIf="dataStorageLocalService.articles.length === 0">
+        <ion-slide>
+            <ion-label>The favorite articles are empty</ion-label>
+        </ion-slide>
+    </ion-slides>
+
+    <app-articles *ngIf="dataStorageLocalService.articles.length > 0" [favoritesFlag]="true" [articles]="dataStorageLocalService.articles"></app-articles>
 </ion-content>

@@ -9,6 +9,7 @@ import { Article } from 'src/app/models/article.model';
 export class ArticlesComponent implements OnInit {
 
   @Input() articles: Article[] = [];
+  @Input() favoritesFlag = false;
 
   constructor() { }
 
