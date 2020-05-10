@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, Platform } from '@ionic/angular';
 
 import { DataStorageLocalService } from '../../services/data-storage-local.service';
 import { Article } from 'src/app/models/article.model';
@@ -18,9 +18,10 @@ export class ArticleComponent implements OnInit {
   @Input() favoritesFlag;
 
   constructor(private iab: InAppBrowser,
-              private socialSharing: SocialSharing,
-              private actionSheetController: ActionSheetController,
-              private dataStorageLocalService: DataStorageLocalService) { }
+    private socialSharing: SocialSharing,
+    private actionSheetController: ActionSheetController,
+    private dataStorageLocalService: DataStorageLocalService,
+    private platform: Platform) { }
 
   ngOnInit() { }
 
@@ -42,16 +43,11 @@ export class ArticleComponent implements OnInit {
         handler: () => {
 
           console.log('Share clicked');
-          this.socialSharing.share(
-            this.article.title,
-            this.article.source.name,
-            '',
-            this.article.url
-          );
+          this.shareArticle();
 
         }
       },
-      dynamicBtnFavorites,
+        dynamicBtnFavorites,
       {
         text: 'Cancel',
         icon: 'close',
@@ -64,6 +60,36 @@ export class ArticleComponent implements OnInit {
     });
     await actionSheet.present();
   }
+
+  shareArticle() {
+
+    if (this.platform.is('cordova')) {
+
+      this.socialSharing.share(
+        this.article.title,
+        this.article.source.name,
+        '',
+        this.article.url
+      );
+    } else {
+
+      if (navigator['share']) {
+
+        navigator['share']({
+          title: this.article.title,
+          text: this.article.description,
+          url: this.article.url,
+        })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      } else {
+
+        console.log('Api share not supported');
+      }
+    }
+  }
+
+
 
   addRemoveFavorites() {
 
